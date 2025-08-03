@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/exercise.dart';
+import '../models/series.dart';
 
 class AddSeriesPage extends StatefulWidget {
   @override
@@ -20,7 +21,7 @@ class _AddSeriesPageState extends State<AddSeriesPage> {
 
   void _submit() {
     if(_formKey.currentState!.validate()){
-      final reps = int.parse(_repsController.text);
+      final reps = int.tryParse(_repsController.text) ?? 0;
       final weight = double.tryParse(_weightController.text) ?? 0.0;
       Navigator.pop(context, Series(reps: reps, weight: weight));
     }

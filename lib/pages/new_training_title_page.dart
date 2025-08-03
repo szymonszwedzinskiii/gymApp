@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gymapp/models/training.dart';
 import 'training_details_page.dart';
+import '../models/training.dart';
 
 class NewTrainingTitlePage extends StatelessWidget {
   final TextEditingController _titleController = TextEditingController();

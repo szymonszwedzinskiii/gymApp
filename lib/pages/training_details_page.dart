@@ -1,41 +1,11 @@
-// import 'package:flutter/material.dart';
-// import 'new_training_page.dart';
-// import 'package:gymapp/models/exercise.dart';
-
-// class TrainingDetailsPage extends StatefulWidget {
-//   final String title;
-
-//   const TrainingDetailsPage({required this.title});
-
-//   @override
-//   _TrainingDetailsPageState createState() => _TrainingDetailsPageState();
-// }
-
-// class _TrainingDetailsPageState extends State<TrainingDetailsPage> {
-//   // Tutaj możesz trzymać listę ćwiczeń (np. List<Exercise>)
-  
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: Text(widget.title)),
-//       body: Center(
-//         child: ElevatedButton(
-//           onPressed: () {
-//             Navigator.push(context,
-//               MaterialPageRoute(builder: (context) => NewTrainingPage()),
-//             );
-//           },
-//           child: Text("Dodaj Ćwiczenie"),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
+import 'ExercisePage.dart';
 import '../models/exercise.dart';
 import 'new_training_page.dart';
 import 'add_series_page.dart';
+import '../models/series.dart';
+import '../models/training.dart';
+import 'exercise_card.dart';
 
 class TrainingDetailsPage extends StatefulWidget {
   final String title;
@@ -48,7 +18,14 @@ class TrainingDetailsPage extends StatefulWidget {
 
 class _TrainingDetailsPageState extends State<TrainingDetailsPage> {
   List<Exercise> exercises = [];
+  late Training training;
 
+  @override 
+  void initState(){
+    super.initState();
+    training = Training(title: widget.title, date: DateTime.now(), exercises: []);
+  }
+  
   void _addExercise() async {
     final newExercise = await Navigator.push<Exercise>(
       context,
@@ -57,7 +34,8 @@ class _TrainingDetailsPageState extends State<TrainingDetailsPage> {
 
     if (newExercise != null) {
       setState(() {
-        exercises.add(newExercise);
+        // exercises.add(newExercise);
+        training.exercises.add(newExercise);
       });
     }
   }
@@ -70,7 +48,7 @@ class _TrainingDetailsPageState extends State<TrainingDetailsPage> {
 
       if(newSeries != null){
         setState(() {
-          exercises[exerciseIndex].series.add(newSeries);
+          training.exercises[exerciseIndex].series.add(newSeries);
         });
       }
     }
@@ -84,26 +62,30 @@ class _TrainingDetailsPageState extends State<TrainingDetailsPage> {
       body: Column(
         children: [
           Expanded(
-            child: exercises.isEmpty
+            child: training.exercises.isEmpty
                 ? Center(child: Text("Brak ćwiczeń"))
                 : ListView.builder(
-                    itemCount: exercises.length,
+                    itemCount: training.exercises.length,
                     itemBuilder: (context, index) {
-                      final e = exercises[index];
-                      return ListTile(
-                        title: Text(e.name),
-                       subtitle: Text('Liczba serii: ${e.series.length}'),
-                        onTap: () => _addSeries(index),
-                      );
+                      final e = training.exercises[index];
+                      return ExerciseCard(
+                        exercise: e,
+                          onTap: () {
+                            Navigator.push(context,
+                              MaterialPageRoute(builder: (_) => ExercisePage(exercise: e)),
+                            );
+                          },
+                        );
                     },
                   ),
           ),
+
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: FloatingActionButton(
+            child: ElevatedButton.icon(
               onPressed: _addExercise,
-              child: Icon(Icons.add),
-              tooltip: "Dodaj Ćwiczenie",
+              icon: Icon(Icons.add),
+              label: Text("Dodaj Ćwiczenie"),
             ),
           ),
         ],

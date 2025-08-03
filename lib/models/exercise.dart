@@ -1,19 +1,21 @@
 // import 'package:flutter/material.dart';
-class Series {
-  final int reps;
-  final double weight;
-  Series({required this.reps, required this.weight});
-
-}
+import 'series.dart';
 
 class Exercise {
   final String name;
-  // final String set;
   List<Series> series;
   
   Exercise({
     required this.name,
-    // required this.set,
-    this.series = const []
-  });
+    List<Series>? series,
+  }) : series = series ?? [];
+
+    String formattedSeries() {
+    if (series.isEmpty) return "Brak serii";
+    return series.asMap().entries.map((entry) {
+      int idx = entry.key + 1;
+      final s = entry.value;
+      return 'seria$idx - ${s.reps}; ${s.weight}kg';
+    }).join(' | ');
+  }
 }

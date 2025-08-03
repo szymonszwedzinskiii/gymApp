@@ -11,14 +11,14 @@ class NewTrainingPage extends StatefulWidget {
 class _NewTrainingPageState extends State<NewTrainingPage> {
   final _formKey = GlobalKey<FormState>();
   final _trainingNameController = TextEditingController();
-  final _setsCounterController = TextEditingController();
+  // final _setsCounterController = TextEditingController();
   final _repsCounterController = TextEditingController();
   final _weightController = TextEditingController();
 
   @override
   void dispose(){
     _trainingNameController.dispose();
-    _setsCounterController.dispose();
+    // _setsCounterController.dispose();
     _repsCounterController.dispose();
     _weightController.dispose();
     super.dispose();
@@ -56,56 +56,40 @@ class _NewTrainingPageState extends State<NewTrainingPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 16),
-              TextFormField(
-                controller: _setsCounterController,
-                decoration: InputDecoration(
-                  labelText: "Seria",
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "To pole nie może być puste";
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16),
-              TextFormField(
-                controller: _repsCounterController,
-                decoration: InputDecoration(
-                  labelText: "Ilość powtórzeń",
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "To pole nie może być puste";
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16),
-              TextFormField(
-                controller: _weightController,
-                decoration: InputDecoration(
-                  labelText: "Ciężar",
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
-                ],
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "To pole nie może być puste";
-                  }
-                  return null;
-                },
-              ),
+              // SizedBox(height: 16),
+              // TextFormField(
+              //   controller: _repsCounterController,
+              //   decoration: InputDecoration(
+              //     labelText: "Ilość powtórzeń",
+              //     border: OutlineInputBorder(),
+              //   ),
+              //   keyboardType: TextInputType.number,
+              //   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              //   validator: (value) {
+              //     if (value == null || value.isEmpty) {
+              //       return "To pole nie może być puste";
+              //     }
+              //     return null;
+              //   },
+              // ),
+              // SizedBox(height: 16),
+              // TextFormField(
+              //   controller: _weightController,
+              //   decoration: InputDecoration(
+              //     labelText: "Ciężar",
+              //     border: OutlineInputBorder(),
+              //   ),
+              //   keyboardType: TextInputType.numberWithOptions(decimal: true),
+              //   inputFormatters: [
+              //     FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+              //   ],
+              //   validator: (value) {
+              //     if (value == null || value.isEmpty) {
+              //       return "To pole nie może być puste";
+              //     }
+              //     return null;
+              //   },
+              // ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _submitForm,
