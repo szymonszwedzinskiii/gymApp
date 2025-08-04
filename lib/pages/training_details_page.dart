@@ -78,7 +78,9 @@ class _TrainingDetailsPageState extends State<TrainingDetailsPage> {
                         );
                     },
                   ),
+
           ),
+          SizedBox(height: 64),
 
           Padding(
             padding: const EdgeInsets.all(16.0),
