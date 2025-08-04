@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gymapp/pages/edit_series_page.dart';
 import '../models/exercise.dart';
 import '../models/series.dart';
 import 'add_series_page.dart';
@@ -40,6 +41,24 @@ class _ExercisePageState extends State<ExercisePage>{
     });
   }
   
+ void _editSeries(int index) async {
+    final updated = await Navigator.push<Series>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => EditSeriesPage(
+          exercise: widget.exercise,
+          index: index,
+        ),
+      ),
+    );
+
+    if (updated != null) {
+      setState(() {
+        widget.exercise.series[index] = updated;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -61,9 +80,8 @@ class _ExercisePageState extends State<ExercisePage>{
                         children: [
                           IconButton(
                             icon: Icon(Icons.edit),
-                            onPressed: (){
-                              // TODO - usupełnij logike edycji cwiczeń
-                            },
+                            onPressed: () => _editSeries(index),
+                              
                           ),
                           IconButton(
                             onPressed: () { _deleteSeries(index); },
