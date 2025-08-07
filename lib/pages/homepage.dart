@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:gymapp/widgets/add_training_card.dart';
+import 'package:gymapp/pages/login_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>{
+class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
-  void _onItemTapped(int index){
+  void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
@@ -26,14 +27,23 @@ class _HomePageState extends State<HomePage>{
         child: Column(
           children: [
             AddTraining(),
-            SizedBox(height:16),
+            SizedBox(height: 16),
+            IconButton(
+              icon: Icon(Icons.login),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
+            ),
           ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        items: const[
+        items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.fitness_center), label: 'Workouts'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
