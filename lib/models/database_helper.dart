@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:gymapp/models/exercise.dart';
 import 'package:gymapp/models/series.dart';
 import 'package:gymapp/models/training.dart';
+import 'package:gymapp/models/user.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -31,7 +32,6 @@ class DatabaseHelper {
   }
 
   Future<void> _createDb(Database db, int version) async {
-    // Użytkownicy
     await db.execute('''
       CREATE TABLE users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -40,7 +40,6 @@ class DatabaseHelper {
       )
     ''');
 
-    // Treningi przypisane do użytkownika
     await db.execute('''
       CREATE TABLE trainings (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -51,7 +50,6 @@ class DatabaseHelper {
       )
     ''');
 
-    // Ćwiczenia przypisane do treningu
     await db.execute('''
       CREATE TABLE exercises (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -61,7 +59,6 @@ class DatabaseHelper {
       )
     ''');
 
-    // Serie przypisane do ćwiczenia
     await db.execute('''
       CREATE TABLE series (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -73,12 +70,23 @@ class DatabaseHelper {
     ''');
   }
 
-  // Przykładowe metody (możesz rozbudować)
   Future<int> insertUser(Map<String, dynamic> user) async {
     final db = await database;
     return await db.insert('users', user);
   }
-
+  Future<User?> getUser(String email) async{
+    final db = await database;
+    final userMap = await db.query(
+      'users',
+      where: 'email = ?',
+      whereArgs: [email],
+    );
+    if(userMap.isNotEmpty){
+      return User.fromMap(userMap.first);
+    }else{
+      return null;
+    }
+  }
   Future<bool> userExists(String email) async{
     final db = await database;
     final List<Map<String, dynamic>> results = await db.query(
@@ -129,10 +137,22 @@ class DatabaseHelper {
 
   Future<List<Training>> getTrainingsByUser(String email) async {
     final db = await database;
-    final trainingMaps = await db.query(
-      'trainings',
+    final userList = await db.query(
+      'users',
       where: 'email = ?',
       whereArgs: [email],
+    );
+
+  if (userList.isEmpty) {
+    // Nie ma takiego użytkownika, zwróć pustą listę
+    return [];
+  }
+
+  final userId = userList.first['id'] as int;
+    final trainingMaps = await db.query(
+      'trainings',
+      where: 'user_id = ?',
+      whereArgs: [userId],
     );
   
     List<Training> trainings = [];

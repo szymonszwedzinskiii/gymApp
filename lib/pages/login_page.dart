@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gymapp/models/database_helper.dart';
 import 'package:gymapp/models/training.dart';
+import 'package:gymapp/models/user.dart';
 
 
 
@@ -16,6 +17,7 @@ class _LoginPageState extends State<LoginPage>{
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   List<Training> trainingList =[];
+  User? user = null;
 
   @override
   void dispose(){
@@ -35,6 +37,8 @@ class _LoginPageState extends State<LoginPage>{
     bool exists = await dbHelper.userExists(email);
       if (exists){
         trainingList = await DatabaseHelper().getTrainingsByUser(_emailController.text);
+        user = await DatabaseHelper().getUser(_emailController.text);
+
       }
       else{
         final db = await DatabaseHelper().database;
@@ -42,11 +46,12 @@ class _LoginPageState extends State<LoginPage>{
           'name': _usernameController.text,
           'email': _emailController.text
         });
+        user = await DatabaseHelper().getUser(_emailController.text);
         print("User $_usernameController.text has been created ");
         trainingList =[];
       }
     }
-    Navigator.pop(context, trainingList);
+    Navigator.pop(context, {'trainingList' : trainingList, 'user': user});
   }
 @override
   Widget build(BuildContext context) {
